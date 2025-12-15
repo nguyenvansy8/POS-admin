@@ -1,11 +1,32 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Trash2, ShoppingBag, CreditCard, Save, ChevronDown, Coffee, Utensils, X, ChevronLeft, ChevronRight, Plus, Minus, PackageOpen } from 'lucide-react';
+import { 
+  Search, Trash2, ShoppingBag, CreditCard, Save, ChevronDown, Coffee, Utensils, X, ChevronLeft, ChevronRight, Plus, Minus, PackageOpen,
+  CupSoda, Pizza, Beef, Soup, IceCream, Sandwich, GlassWater, UtensilsCrossed
+} from 'lucide-react';
 import { CATALOGS, INITIAL_PRODUCTS } from '../../products/constants/productData';
 import { Product, ProductCategory } from '../../products/types';
 
+// Helper to render dynamic icons (duplicated from ProductBuilder for POS usage)
+const IconRenderer = ({ name, className }: { name: string | undefined; className?: string }) => {
+  const icons: any = { 
+    Coffee, 
+    CupSoda, 
+    IceCream, 
+    Sandwich, 
+    Soup, 
+    Pizza, 
+    Beef, 
+    Utensils, 
+    GlassWater, 
+    UtensilsCrossed 
+  };
+  const IconComponent = (name && icons[name]) ? icons[name] : Utensils;
+  return <IconComponent className={className} />;
+};
+
 // Mock Cart Item Interface
 interface CartItem {
-  cartId: string; // Still useful for React keys, though grouping logic relies on product.id
+  cartId: string; 
   product: Product;
   quantity: number;
 }
@@ -16,20 +37,19 @@ const POS: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileCartOpen, setIsMobileCartOpen] = useState(false); // Mobile Cart State
 
-  // Initial Cart State (Grouped logic applied)
-  const [cart, setCart] = useState<CartItem[]>([
-    { cartId: 'c1', product: INITIAL_PRODUCTS[0], quantity: 1 },
-    { cartId: 'c2', product: INITIAL_PRODUCTS[1], quantity: 2 }, // Example: Quantity 2
-  ]);
+  // Initial Cart State
+  const [cart, setCart] = useState<CartItem[]>([]);
 
   // Visual Styles Mapping based on Catalog ID (Pastel colors)
   const getCardStyle = (catalogId: string | undefined) => {
     switch (catalogId) {
       case 'cat_milktea': return 'bg-rose-50 border-rose-100 hover:border-rose-300';
       case 'cat_tea': return 'bg-lime-50 border-lime-100 hover:border-lime-300';
-      case 'cat_blended': return 'bg-cyan-50 border-cyan-100 hover:border-cyan-300';
       case 'cat_coffee': return 'bg-amber-50 border-amber-100 hover:border-amber-300';
       case 'cat_burger': return 'bg-orange-50 border-orange-100 hover:border-orange-300';
+      case 'cat_pizza': return 'bg-red-50 border-red-100 hover:border-red-300';
+      case 'cat_noodle': return 'bg-yellow-50 border-yellow-100 hover:border-yellow-300';
+      case 'cat_rice': return 'bg-emerald-50 border-emerald-100 hover:border-emerald-300';
       default: return 'bg-indigo-50 border-indigo-100 hover:border-indigo-300';
     }
   };
@@ -38,19 +58,32 @@ const POS: React.FC = () => {
     switch (catalogId) {
       case 'cat_milktea': return 'bg-rose-200 text-rose-800';
       case 'cat_tea': return 'bg-lime-200 text-lime-800';
-      case 'cat_blended': return 'bg-cyan-200 text-cyan-800';
       case 'cat_coffee': return 'bg-amber-200 text-amber-800';
       case 'cat_burger': return 'bg-orange-200 text-orange-800';
+      case 'cat_pizza': return 'bg-red-200 text-red-800';
+      case 'cat_noodle': return 'bg-yellow-200 text-yellow-800';
+      case 'cat_rice': return 'bg-emerald-200 text-emerald-800';
       default: return 'bg-slate-200 text-slate-800';
     }
   };
 
-  const getProductImage = (catalogId: string | undefined) => {
-    if (catalogId === 'cat_milktea') return 'https://cdn-icons-png.flaticon.com/512/3081/3081162.png';
-    if (catalogId === 'cat_tea') return 'https://cdn-icons-png.flaticon.com/512/3132/3132693.png';
-    if (catalogId === 'cat_coffee') return 'https://cdn-icons-png.flaticon.com/512/2935/2935413.png';
-    if (catalogId === 'cat_burger') return 'https://cdn-icons-png.flaticon.com/512/3075/3075977.png';
-    return 'https://cdn-icons-png.flaticon.com/512/2515/2515183.png';
+  // Helper to get icon name from catalog ID
+  const getProductIconName = (catalogId: string | undefined) => {
+    const catalog = CATALOGS.find(c => c.id === catalogId);
+    return catalog ? catalog.icon : 'Utensils';
+  };
+
+  const getIconColor = (catalogId: string | undefined) => {
+    switch (catalogId) {
+      case 'cat_milktea': return 'text-rose-600 bg-white shadow-sm';
+      case 'cat_tea': return 'text-lime-600 bg-white shadow-sm';
+      case 'cat_coffee': return 'text-amber-600 bg-white shadow-sm';
+      case 'cat_burger': return 'text-orange-600 bg-white shadow-sm';
+      case 'cat_pizza': return 'text-red-600 bg-white shadow-sm';
+      case 'cat_noodle': return 'text-yellow-600 bg-white shadow-sm';
+      case 'cat_rice': return 'text-emerald-600 bg-white shadow-sm';
+      default: return 'text-indigo-600 bg-white shadow-sm';
+    }
   };
 
   // Logic
@@ -121,10 +154,11 @@ const POS: React.FC = () => {
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <div className="flex h-[calc(100vh-60px)] md:h-screen bg-slate-50 overflow-hidden font-sans relative">
+    // Use h-full because App.tsx already provides the constrained 100dvh container
+    <div className="flex h-full bg-slate-50 overflow-hidden font-sans relative">
       
       {/* LEFT SIDEBAR: FILTERS (Visible XL+) */}
-      <div className="hidden xl:flex w-72 bg-white border-r border-slate-200 flex-col p-4 gap-6 z-10">
+      <div className="hidden xl:flex w-72 bg-white border-r border-slate-200 flex-col p-4 gap-6 z-10 flex-shrink-0">
         {/* Search */}
         <div className="relative">
           <Search className="absolute left-3 top-2.5 w-5 h-5 text-slate-400" />
@@ -251,7 +285,7 @@ const POS: React.FC = () => {
         </div>
 
         {/* Desktop Header (XL Only) */}
-        <div className="hidden xl:flex items-center justify-between mb-6 p-6 pb-0">
+        <div className="hidden xl:flex items-center justify-between mb-6 p-6 pb-0 flex-shrink-0">
             <h2 className="text-xl font-bold text-slate-800 uppercase">
                 {selectedCategory === 'drink' ? 'Đồ uống' : 'Đồ ăn'} 
                 <span className="ml-2 text-slate-400 text-base normal-case">({filteredProducts.length} món)</span>
@@ -259,7 +293,7 @@ const POS: React.FC = () => {
         </div>
 
         {/* Scrollable Grid */}
-        <div className="flex-1 overflow-y-auto p-4 md:p-6 pb-24 lg:pb-6">
+        <div className="flex-1 overflow-y-auto p-4 pb-[100px] lg:pb-6">
           {filteredProducts.length === 0 ? (
             // EMPTY STATE WHEN NO PRODUCTS
             <div className="flex flex-col items-center justify-center h-full text-center p-8 animate-in fade-in zoom-in duration-300">
@@ -291,6 +325,9 @@ const POS: React.FC = () => {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 md:gap-4 xl:gap-6">
               {filteredProducts.map(product => {
                 const quantity = getItemQuantity(product.id);
+                const iconName = getProductIconName(product.catalogId);
+                const iconStyle = getIconColor(product.catalogId);
+                
                 return (
                   <div 
                     key={product.id}
@@ -317,13 +354,13 @@ const POS: React.FC = () => {
                        </div>
                      )}
 
-                     {/* Product Image (Icon) */}
-                     <div className="w-16 h-16 md:w-24 md:h-24 mb-2 md:mb-4 drop-shadow-md transform transition-transform group-hover:-translate-y-2 duration-300">
-                        <img 
-                          src={getProductImage(product.catalogId)} 
-                          alt={product.name}
-                          className="w-full h-full object-contain"
-                        />
+                     {/* Product Icon */}
+                     <div className={`
+                       w-16 h-16 md:w-24 md:h-24 mb-2 md:mb-4 rounded-full flex items-center justify-center 
+                       transform transition-transform group-hover:-translate-y-2 duration-300
+                       ${iconStyle}
+                     `}>
+                        <IconRenderer name={iconName} className="w-8 h-8 md:w-12 md:h-12" />
                      </div>
 
                      {/* Content */}
@@ -369,7 +406,7 @@ const POS: React.FC = () => {
         </div>
 
         {/* MOBILE CART BAR (Visible < LG) */}
-        <div className="lg:hidden absolute bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-3 md:p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-30 safe-area-bottom">
+        <div className="lg:hidden fixed bottom-0 left-0 md:left-64 right-0 bg-white border-t border-slate-200 p-3 md:p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-30 safe-area-bottom">
              <button 
                onClick={() => setIsMobileCartOpen(true)}
                className="w-full bg-emerald-800 text-white rounded-xl p-3 md:p-4 flex items-center justify-between shadow-lg shadow-emerald-100 active:scale-[0.98] transition-transform"
@@ -400,8 +437,13 @@ const POS: React.FC = () => {
         />
       )}
       
+      {/* 
+         On Desktop (LG+), this becomes a relative sidebar taking full height.
+         On Mobile/Tablet (<LG), this is a fixed bottom drawer.
+      */}
       <div className={`
-        fixed inset-x-0 bottom-0 top-10 z-50 bg-white rounded-t-2xl shadow-2xl transform transition-transform duration-300 ease-out flex flex-col lg:relative lg:inset-auto lg:top-auto lg:transform-none lg:w-96 lg:rounded-none lg:shadow-xl lg:border-l lg:border-slate-200 lg:flex
+        fixed inset-x-0 bottom-0 top-10 z-50 bg-white rounded-t-2xl shadow-2xl transform transition-transform duration-300 ease-out flex flex-col 
+        lg:relative lg:inset-auto lg:top-auto lg:transform-none lg:w-96 lg:rounded-none lg:shadow-xl lg:border-l lg:border-slate-200 lg:flex lg:h-full lg:flex-col
         ${isMobileCartOpen ? 'translate-y-0' : 'translate-y-[110%] lg:translate-y-0'}
       `}>
         
@@ -420,7 +462,7 @@ const POS: React.FC = () => {
            </button>
         </div>
 
-        {/* Cart Items List */}
+        {/* Cart Items List - Independent Scroll */}
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
           {cart.length === 0 ? (
             <div className="h-full flex flex-col items-center justify-center text-slate-400 space-y-4">
@@ -470,7 +512,7 @@ const POS: React.FC = () => {
           )}
         </div>
 
-        {/* Footer Actions */}
+        {/* Footer Actions - Always at bottom */}
         <div className="p-4 md:p-6 bg-slate-50 border-t border-slate-200 space-y-4 flex-shrink-0 safe-area-bottom">
            {/* Summary */}
            <div className="flex justify-between items-end">

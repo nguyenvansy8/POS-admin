@@ -13,11 +13,12 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <div className="flex h-screen bg-slate-50 font-sans text-slate-900 overflow-hidden">
+      {/* Use fixed inset-0 to strictly constrain app to viewport, preventing external scrolling */}
+      <div className="fixed inset-0 bg-slate-50 font-sans text-slate-900 overflow-hidden flex">
         <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
         
         {/* Main Content Wrapper */}
-        <div className="flex-1 flex flex-col md:ml-64 xl:ml-72 transition-all duration-300 h-screen overflow-hidden">
+        <div className="flex-1 flex flex-col md:ml-64 xl:ml-72 transition-all duration-300 h-full overflow-hidden w-full">
           
           {/* Mobile Header */}
           <header className="md:hidden flex items-center justify-between bg-white border-b border-slate-200 px-4 py-3 sticky top-0 z-20 flex-shrink-0">
@@ -41,12 +42,14 @@ const App: React.FC = () => {
           </header>
 
           {/* Page Content Scrollable Area */}
-          <main className="flex-1 overflow-y-auto overflow-x-hidden scroll-smooth relative">
+          <main className="flex-1 overflow-hidden relative flex flex-col">
+            {/* Inner scroll container for non-POS pages, POS handles its own scroll */}
             <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/stores" element={<Stores />} />
-              <Route path="/stores/:storeId" element={<StoreDetail />} />
-              <Route path="/products" element={<Products />} />
+              <Route path="/" element={<div className="h-full overflow-y-auto"><Dashboard /></div>} />
+              <Route path="/stores" element={<div className="h-full overflow-y-auto"><Stores /></div>} />
+              <Route path="/stores/:storeId" element={<div className="h-full overflow-y-auto"><StoreDetail /></div>} />
+              <Route path="/products" element={<div className="h-full overflow-y-auto"><Products /></div>} />
+              {/* POS takes full height and manages its own overflow */}
               <Route path="/pos" element={<POS />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

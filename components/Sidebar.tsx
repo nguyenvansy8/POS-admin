@@ -27,11 +27,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
       {/* Sidebar Container */}
       <aside 
-        className={`fixed left-0 top-0 z-50 h-screen w-64 xl:w-72 bg-white border-r border-slate-200 flex flex-col transition-transform duration-300 ease-in-out md:translate-x-0 ${
+        className={`fixed left-0 top-0 z-50 h-full w-64 xl:w-72 bg-white border-r border-slate-200 flex flex-col transition-transform duration-300 ease-in-out md:translate-x-0 ${
           isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
         }`}
       >
-        <div className="p-4 xl:p-6 border-b border-slate-100 flex items-center justify-between">
+        <div className="p-4 xl:p-6 border-b border-slate-100 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3 xl:gap-4">
             <div className="w-8 h-8 xl:w-10 xl:h-10 bg-indigo-600 rounded-lg xl:rounded-xl flex items-center justify-center">
               <Store className="text-white w-5 h-5 xl:w-6 xl:h-6" />
@@ -70,7 +70,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           ))}
         </nav>
 
-        <div className="p-3 xl:p-4 border-t border-slate-100 space-y-1 xl:space-y-2 bg-white">
+        <div className="p-3 xl:p-4 border-t border-slate-100 space-y-1 xl:space-y-2 bg-white flex-shrink-0 mt-auto">
           <button className="flex w-full items-center gap-3 xl:gap-4 px-4 py-3 xl:px-6 xl:py-4 rounded-lg xl:rounded-xl text-sm xl:text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
             <Settings className="w-5 h-5 xl:w-6 xl:h-6" />
             Cài đặt

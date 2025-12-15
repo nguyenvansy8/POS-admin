@@ -1,14 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Coffee, Utensils, ChevronRight, ChevronLeft, Check, 
-  CupSoda, Pizza, Beef, Soup, IceCream, Sandwich, CheckCircle2
+  CupSoda, Pizza, Beef, Soup, IceCream, Sandwich, CheckCircle2,
+  GlassWater, UtensilsCrossed
 } from 'lucide-react';
 import { ProductCategory, CatalogItem, Product } from '../types';
 import { CATALOGS, ATTRIBUTES } from '../constants/productData';
 
 // Helper to render dynamic icons
 const IconRenderer = ({ name, className }: { name: string; className?: string }) => {
-  const icons: any = { Coffee, CupSoda, IceCream, Sandwich, Soup, Pizza, Beef, Utensils };
+  const icons: any = { 
+    Coffee, 
+    CupSoda, 
+    IceCream, 
+    Sandwich, 
+    Soup, 
+    Pizza, 
+    Beef, 
+    Utensils, 
+    GlassWater, 
+    UtensilsCrossed 
+  };
   const IconComponent = icons[name] || Utensils;
   return <IconComponent className={className} />;
 };
@@ -50,6 +62,12 @@ const CATALOG_STYLES: Record<string, { bg: string, border: string, iconBg: strin
     border: 'border-yellow-200 hover:border-yellow-400', 
     iconBg: 'bg-white shadow-sm', 
     iconColor: 'text-yellow-700' 
+  },
+  'cat_rice': { 
+    bg: 'bg-emerald-50 hover:bg-emerald-100', 
+    border: 'border-emerald-200 hover:border-emerald-400', 
+    iconBg: 'bg-white shadow-sm', 
+    iconColor: 'text-emerald-700' 
   },
 };
 
