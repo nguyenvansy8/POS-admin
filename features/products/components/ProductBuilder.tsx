@@ -253,8 +253,8 @@ const ProductBuilder: React.FC<ProductBuilderProps> = ({ initialData, onClose, o
         {step === 3 && selectedCatalog && (
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 xl:gap-8 animate-in slide-in-from-right-8 duration-300">
             
-            {/* Left: Options (Ordered second on mobile, first on desktop) */}
-            <div className="xl:col-span-2 space-y-6 xl:space-y-8 pb-32 order-last xl:order-first">
+            {/* Left: Options */}
+            <div className="xl:col-span-2 space-y-6 xl:space-y-8">
               {selectedCatalog.availableAttributes.map((attrId) => {
                 const attr = ATTRIBUTES.find(a => a.id === attrId);
                 if (!attr) return null;
@@ -301,9 +301,9 @@ const ProductBuilder: React.FC<ProductBuilderProps> = ({ initialData, onClose, o
               })}
             </div>
 
-            {/* Right: Preview & Action (Ordered first on mobile, last on desktop) */}
-            <div className="xl:col-span-1 order-first xl:order-last">
-              <div className="bg-white rounded-2xl xl:rounded-3xl shadow-xl border border-slate-100 p-5 xl:p-8 sticky top-0 xl:bottom-6">
+            {/* Right: Preview & Action */}
+            <div className="xl:col-span-1">
+              <div className="bg-white rounded-2xl xl:rounded-3xl shadow-xl border border-slate-100 p-5 xl:p-8 sticky top-0 xl:top-0">
                 <h3 className="text-slate-400 font-bold text-xs xl:text-sm uppercase mb-4 xl:mb-6 tracking-wider">Xem trước món</h3>
                 
                 <div className="flex flex-col items-center text-center mb-6 xl:mb-8">

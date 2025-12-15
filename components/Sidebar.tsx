@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutDashboard, Store, Package, LogOut, Settings, X } from 'lucide-react';
+import { LayoutDashboard, Store, Package, LogOut, Settings, X, ShoppingCart } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 interface SidebarProps {
@@ -10,6 +10,7 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const navItems = [
     { icon: LayoutDashboard, label: 'Tổng quan', path: '/' },
+    { icon: ShoppingCart, label: 'Bán hàng (POS)', path: '/pos' },
     { icon: Store, label: 'Cửa hàng', path: '/stores' },
     { icon: Package, label: 'Sản phẩm', path: '/products' },
   ];

@@ -6,6 +6,7 @@ import Dashboard from './features/dashboard/pages/Dashboard';
 import Stores from './features/stores/pages/Stores';
 import StoreDetail from './features/stores/pages/StoreDetail';
 import Products from './features/products/pages/Products';
+import POS from './features/pos/pages/POS';
 
 const App: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -46,6 +47,7 @@ const App: React.FC = () => {
               <Route path="/stores" element={<Stores />} />
               <Route path="/stores/:storeId" element={<StoreDetail />} />
               <Route path="/products" element={<Products />} />
+              <Route path="/pos" element={<POS />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>

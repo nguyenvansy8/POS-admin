@@ -5,6 +5,7 @@ export const CATALOGS: CatalogItem[] = [
   { id: 'cat_coffee', name: 'Cà phê', categoryId: 'drink', basePrice: 25000, icon: 'Coffee', availableAttributes: ['attr_size_drink', 'attr_sugar', 'attr_ice'] },
   { id: 'cat_milktea', name: 'Trà sữa', categoryId: 'drink', basePrice: 30000, icon: 'CupSoda', availableAttributes: ['attr_size_drink', 'attr_sugar', 'attr_ice', 'attr_topping'] },
   { id: 'cat_tea', name: 'Trà trái cây', categoryId: 'drink', basePrice: 35000, icon: 'IceCream', availableAttributes: ['attr_size_drink', 'attr_sugar', 'attr_ice', 'attr_topping'] },
+  { id: 'cat_blended', name: 'Đá xay', categoryId: 'drink', basePrice: 45000, icon: 'IceCream', availableAttributes: ['attr_size_drink', 'attr_sugar', 'attr_ice'] },
   // Foods
   { id: 'cat_burger', name: 'Burger', categoryId: 'food', basePrice: 45000, icon: 'Sandwich', availableAttributes: ['attr_size_food', 'attr_extra_food'] },
   { id: 'cat_noodle', name: 'Mì ý / Nui', categoryId: 'food', basePrice: 50000, icon: 'Soup', availableAttributes: ['attr_size_food', 'attr_sauce', 'attr_extra_food'] },
@@ -72,18 +73,38 @@ export const ATTRIBUTES: Attribute[] = [
 
 export const INITIAL_PRODUCTS: Product[] = [
   { 
-    id: 'P001', 
-    name: 'Cà phê sữa đá', 
-    sku: 'CFS', 
-    category: 'drink', 
-    price: 29000, 
-    status: 'active', 
-    description: 'Size M - Ít đường',
-    catalogId: 'cat_coffee',
-    selections: {
-        'attr_size_drink': ['m'],
-        'attr_sugar': ['50'],
-        'attr_ice': ['100']
-    }
-  }
+    id: 'P001', name: 'Trà Sữa TC', sku: 'TS-TC-01', category: 'drink', price: 50000, status: 'active', 
+    description: 'Trân châu đen', catalogId: 'cat_milktea',
+    selections: { 'attr_size_drink': ['m'], 'attr_topping': ['t1'] }
+  },
+  { 
+    id: 'P002', name: 'Trà Sữa Kem Trứng', sku: 'TS-KT-02', category: 'drink', price: 55000, status: 'active', 
+    description: 'Kem trứng nướng', catalogId: 'cat_milktea',
+    selections: { 'attr_size_drink': ['m'], 'attr_topping': ['t3'] }
+  },
+  { 
+    id: 'P003', name: 'Trà Sữa TC', sku: 'TS-TC-03', category: 'drink', price: 50000, status: 'active', 
+    description: 'Size L', catalogId: 'cat_milktea',
+    selections: { 'attr_size_drink': ['l'] }
+  },
+  { 
+    id: 'P004', name: 'Sữa Tươi TC DL', sku: 'ST-TC-04', category: 'drink', price: 50000, status: 'out_of_stock', 
+    description: 'Đường đen', catalogId: 'cat_milktea',
+    selections: { 'attr_size_drink': ['m'] }
+  },
+  { 
+    id: 'P005', name: 'Trà Đào Cam Sả', sku: 'TD-CS-05', category: 'drink', price: 45000, status: 'active', 
+    description: 'Tươi mát', catalogId: 'cat_tea',
+    selections: { 'attr_size_drink': ['m'] }
+  },
+  { 
+    id: 'P006', name: 'Lục Trà Táo Xanh', sku: 'LT-TX-06', category: 'drink', price: 40000, status: 'active', 
+    description: 'Thạch táo', catalogId: 'cat_tea',
+    selections: { 'attr_size_drink': ['m'] }
+  },
+   { 
+    id: 'P007', name: 'Burger Bò Cheese', sku: 'BG-BC-07', category: 'food', price: 65000, status: 'active', 
+    description: '2 lớp bò', catalogId: 'cat_burger',
+    selections: { 'attr_size_food': ['big'] }
+  },
 ];
